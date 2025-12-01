@@ -1,0 +1,5 @@
+*.iml
+*.json
+*.md
+.idea/
+out/
