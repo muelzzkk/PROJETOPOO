@@ -1,0 +1,13 @@
+view\TelaPrincipal.class
+model\DadosObrigatoriosException.class
+model\PontosInsuficientesException.class
+model\CampoInvalidoException.class
+model\ValorCompraInvalidoException.class
+view\TelaCadastro$1.class
+view\TelaCadastro.class
+model\ClienteNaoEncontradoException.class
+view\TelaCompra.class
+model\ClienteJaRegistradoException.class
+view\TelaPontos.class
+view\TelaBonus.class
+model\TransacaoInvalidaException.class
