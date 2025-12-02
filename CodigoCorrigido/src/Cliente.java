@@ -4,6 +4,16 @@ public class Cliente extends Pessoa {
 
     public Cliente(String nome, String cpf, String email) {
         super(nome, cpf, email);
+
+        if (nome == null || nome.isBlank())
+            throw new ProgramaFidelidadeException("Nome inválido.");
+
+        if (cpf == null || cpf.isBlank())
+            throw new ProgramaFidelidadeException("CPF inválido.");
+
+        if (email == null || !email.contains("@"))
+            throw new ProgramaFidelidadeException("Email inválido.");
+
         this.cartaoFidelidade = new CartaoFidelidade();
     }
 
