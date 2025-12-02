@@ -11,7 +11,7 @@ public class CartaoFidelidade {
     }
 
     public void adicionarPontos(int pontos) {
-        if (pontos <= 0)
+        if (pontos < 0)
             throw new ProgramaFidelidadeException("Quantidade de pontos deve ser positiva.");
         this.pontos += pontos;
     }

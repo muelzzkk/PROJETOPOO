@@ -149,6 +149,10 @@ public class ProgramaFidelidade {
                 if (dtoList != null) {
                     for (ClienteDTO dto : dtoList) {
                         Cliente c = new Cliente(dto.nome, dto.cpf, dto.email);
+
+                        if (dto.pontos < 0)
+                            throw new ProgramaFidelidadeException("Arquivo contém pontos inválidos (negativos).");
+
                         c.getCartaoFidelidade().adicionarPontos(dto.pontos);
                         clientes.add(c);
                     }
