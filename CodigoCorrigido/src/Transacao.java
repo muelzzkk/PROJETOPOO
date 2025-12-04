@@ -1,3 +1,5 @@
+import exceptions.TransacaoException;
+
 public class Transacao {
 
     private final Cliente cliente;
@@ -5,16 +7,15 @@ public class Transacao {
 
     public Transacao(Cliente cliente, double valor) {
         if (cliente == null)
-            throw new ProgramaFidelidadeException("Cliente não pode ser nulo.");
+            throw new TransacaoException("Cliente não pode ser nulo.");
 
         if (valor <= 0)
-            throw new ProgramaFidelidadeException("Valor da transação deve ser positivo.");
+            throw new TransacaoException("Valor da transação deve ser positivo.");
 
         this.cliente = cliente;
         this.valor = valor;
 
-        int pontosGanhos = (int)(valor / 10);
-        cliente.getCartaoFidelidade().adicionarPontos(pontosGanhos);
+        // IMPORTANT: NÃO adicionar pontos aqui. A regra de pontos fica em ProgramaFidelidade.adicionarTransacao(...)
     }
 
     public Cliente getCliente() {
@@ -27,6 +28,6 @@ public class Transacao {
 
     @Override
     public String toString() {
-        return "Cliente=" + cliente.getNome() + ", valor=" + valor;
+        return "Transação = Cliente=" + cliente.getNome() + ", CPF=" + cliente.getCpf() + ", Valor: R$" + valor;
     }
 }

@@ -1,27 +1,46 @@
+import exceptions.CartaoFidelidadeException;
+
 public class CartaoFidelidade {
 
     private int pontos;
+    private int totalPontos; // total acumulado ao longo do tempo
 
     public CartaoFidelidade() {
         this.pontos = 0;
+        this.totalPontos = 0;
     }
 
     public int getPontos() {
         return pontos;
     }
 
+    // usado apenas ao carregar do JSON
+    public void setPontos(int pontos) {
+        if (pontos < 0) throw new CartaoFidelidadeException("Pontos inválidos (negativo).");
+        this.pontos = pontos;
+    }
+
+    public int getTotalPontos() {
+        return totalPontos;
+    }
+
+    // usado apenas ao carregar do JSON
+    public void setTotalPontos(int totalPontos) {
+        if (totalPontos < 0) throw new CartaoFidelidadeException("Total de pontos inválido (negativo).");
+        this.totalPontos = totalPontos;
+    }
+
     public void adicionarPontos(int pontos) {
-        if (pontos < 0)
-            throw new ProgramaFidelidadeException("Quantidade de pontos deve ser positiva.");
+        if (pontos <= 0) throw new CartaoFidelidadeException("Quantidade de pontos deve ser positiva.");
+
         this.pontos += pontos;
+        this.totalPontos += pontos;
     }
 
     public boolean resgatar(int pontos) {
-        if (pontos <= 0)
-            throw new ProgramaFidelidadeException("Valor para resgate inválido.");
+        if (pontos <= 0) throw new CartaoFidelidadeException("Valor para resgate inválido.");
 
-        if (this.pontos < pontos)
-            return false;
+        if (this.pontos < pontos) return false;
 
         this.pontos -= pontos;
         return true;
@@ -29,6 +48,6 @@ public class CartaoFidelidade {
 
     @Override
     public String toString() {
-        return String.valueOf(pontos);
+        return "Pontos: " + pontos + " (Total: " + totalPontos + ")";
     }
 }

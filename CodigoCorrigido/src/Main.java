@@ -1,21 +1,38 @@
 public class Main {
     public static void main(String[] args) {
-        ProgramaFidelidade programa = new ProgramaFidelidade();
 
-        Cliente c1 = new Cliente("Marco", "123", "marco@gmail.com");
-        programa.adicionarCliente(c1);
+        ProgramaFidelidade pf = new ProgramaFidelidade();
 
-        Cliente c2 = new Cliente("Samuel", "345", "samuel@gmail.com");
-        programa.adicionarCliente(c2);
+        System.out.println("======= TESTE 1: ADICIONAR CLIENTE MANUAL =======");
+        Cliente c1 = new Cliente("Diogo", "11122233344", "diogo@email.com");
+        pf.adicionarCliente(c1);
 
-        programa.adicionarTransacao(new Transacao(c1, 25.00));
-        programa.adicionarTransacao(new Transacao(c2, 200.00));
-        programa.adicionarTransacao(new Transacao(c1, 25.00));
+        System.out.println("\n======= TESTE 2: FAZER TRANSAÇÃO =======");
+        pf.fazerTransacao("11122233344", 150);  // deve gerar pontos de acordo com categoria atual
 
-        System.out.println("\nClientes:");
-        programa.exibirClientes();
+        System.out.println("\n======= TESTE 3: FAZER TRANSAÇÃO COM CADASTRO AUTOMÁTICO =======");
+        pf.fazerTransacaoComCadastroAutomatico(
+                "Maria",
+                "99988877766",
+                "maria@email.com",
+                500
+        );
 
-        System.out.println("\nTransações:");
-        programa.exibirTransacoes();
+        System.out.println("\n======= TESTE 4: RESGATAR PONTOS =======");
+        boolean resgatado = c1.getCartaoFidelidade().resgatar(1);
+        System.out.println("Resgate de pontos para Diogo: " + (resgatado ? "OK" : "Falhou"));
+
+        System.out.println("\n======= TESTE 5: EXIBIR CLIENTES =======");
+        pf.exibirClientes();
+
+        System.out.println("\n======= TESTE 6: EXIBIR TRANSAÇÕES =======");
+        pf.exibirTransacoes();
+
+        System.out.println("\n======= TESTE 7: TESTAR PERSISTÊNCIA (salvar + carregar) =======");
+        // Apenas chama operações que já salvam internamente.
+        pf.fazerTransacao("11122233344", 50);
+        System.out.println("Arquivos JSON devem ter sido salvos formatados.");
+
+        System.out.println("\n======= FIM DOS TESTES =======");
     }
 }
