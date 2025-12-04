@@ -40,10 +40,6 @@ public class Cliente extends Pessoa {
     public void atualizarStatus() {
         int total = cartaoFidelidade.getTotalPontos();
 
-        // Regras pedidas:
-        // BRONZE: total < 100
-        // PRATA: 100 <= total <= 500
-        // OURO: total > 500
         if (total > 500) {
             status = StatusCliente.OURO;
         } else if (total >= 100) {

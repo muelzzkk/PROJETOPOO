@@ -14,8 +14,6 @@ public class Transacao {
 
         this.cliente = cliente;
         this.valor = valor;
-
-        // IMPORTANT: NÃO adicionar pontos aqui. A regra de pontos fica em ProgramaFidelidade.adicionarTransacao(...)
     }
 
     public Cliente getCliente() {

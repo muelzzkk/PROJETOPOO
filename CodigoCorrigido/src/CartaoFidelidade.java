@@ -3,7 +3,7 @@ import exceptions.CartaoFidelidadeException;
 public class CartaoFidelidade {
 
     private int pontos;
-    private int totalPontos; // total acumulado ao longo do tempo
+    private int totalPontos;
 
     public CartaoFidelidade() {
         this.pontos = 0;
@@ -14,7 +14,6 @@ public class CartaoFidelidade {
         return pontos;
     }
 
-    // usado apenas ao carregar do JSON
     public void setPontos(int pontos) {
         if (pontos < 0) throw new CartaoFidelidadeException("Pontos inválidos (negativo).");
         this.pontos = pontos;
@@ -24,7 +23,6 @@ public class CartaoFidelidade {
         return totalPontos;
     }
 
-    // usado apenas ao carregar do JSON
     public void setTotalPontos(int totalPontos) {
         if (totalPontos < 0) throw new CartaoFidelidadeException("Total de pontos inválido (negativo).");
         this.totalPontos = totalPontos;

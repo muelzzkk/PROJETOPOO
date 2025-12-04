@@ -17,7 +17,6 @@ public class ProgramaFidelidade {
     private static final String CLIENTES_FILE = "clientes.json";
     private static final String TRANSACOES_FILE = "transacoes.json";
 
-    // Pretty printing
     private final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public ProgramaFidelidade() {
@@ -26,9 +25,6 @@ public class ProgramaFidelidade {
         carregarDoArquivo();
     }
 
-    // --------------------------------------------
-    // CADASTRAR CLIENTE
-    // --------------------------------------------
     public void adicionarCliente(Cliente cliente) {
         if (cliente == null)
             throw new ProgramaFidelidadeException("Cliente inválido.");
@@ -40,9 +36,6 @@ public class ProgramaFidelidade {
         salvarClientes();
     }
 
-    // --------------------------------------------
-    // BUSCAR CLIENTE
-    // --------------------------------------------
     public Cliente buscarClientePorCPF(String cpf) {
         if (cpf == null || cpf.length() != 11) return null;
 
@@ -54,9 +47,6 @@ public class ProgramaFidelidade {
         return null;
     }
 
-    // --------------------------------------------
-    // TRANSAÇÕES
-    // --------------------------------------------
     public void adicionarTransacao(Transacao transacao) {
         if (transacao == null) throw new ProgramaFidelidadeException("Transação inválida.");
 
@@ -65,19 +55,18 @@ public class ProgramaFidelidade {
 
         if (valor <= 0) throw new ProgramaFidelidadeException("Valor da transação deve ser maior que zero.");
 
-        // ====== NOVA LÓGICA DE PONTOS (baseada em totalPontos e por intervalo de R$50) ======
         int totalAntes = cliente.getCartaoFidelidade().getTotalPontos();
 
         int pontosPor50;
         if (totalAntes > 500) {
-            pontosPor50 = 3; // OURO
+            pontosPor50 = 3;
         } else if (totalAntes >= 100) {
-            pontosPor50 = 2; // PRATA
+            pontosPor50 = 2;
         } else {
-            pontosPor50 = 1; // BRONZE
+            pontosPor50 = 1;
         }
 
-        int unidades50 = (int) (valor / 50); // quantos blocos de R$50
+        int unidades50 = (int) (valor / 50);
         int pontosGanhos = unidades50 * pontosPor50;
 
         if (pontosGanhos > 0) {
@@ -85,10 +74,8 @@ public class ProgramaFidelidade {
             cliente.atualizarStatus();
         }
 
-        // Adiciona transação à lista
         transacoes.add(transacao);
 
-        // Persiste os dados atualizados
         salvarTransacoes();
         salvarClientes();
     }
@@ -117,9 +104,6 @@ public class ProgramaFidelidade {
         adicionarTransacao(t);
     }
 
-    // --------------------------------------------
-    // EXIBIÇÃO
-    // --------------------------------------------
     public void exibirClientes() {
         for (Cliente c : clientes) {
             System.out.println(c);
@@ -132,9 +116,6 @@ public class ProgramaFidelidade {
         }
     }
 
-    // --------------------------------------------
-    // ARQUIVOS - SALVAR
-    // --------------------------------------------
     private void salvarClientes() {
         List<ClienteDTO> dtoList = new ArrayList<>();
 
@@ -173,11 +154,7 @@ public class ProgramaFidelidade {
         }
     }
 
-    // --------------------------------------------
-    // ARQUIVOS - CARREGAR
-    // --------------------------------------------
     private void carregarDoArquivo() {
-        // CARREGAR CLIENTES
         File clientesFile = new File(CLIENTES_FILE);
 
         if (clientesFile.exists()) {
@@ -192,14 +169,12 @@ public class ProgramaFidelidade {
                     for (ClienteDTO dto : dtoList) {
                         Cliente c = new Cliente(dto.nome, dto.cpf, dto.email);
 
-                        // carregar pontos e total de pontos
                         if (dto.pontos < 0 || dto.totalPontos < 0)
                             throw new ArquivoException("Arquivo contém pontos inválidos (negativos).");
 
                         if (dto.pontos > 0) c.getCartaoFidelidade().setPontos(dto.pontos);
                         if (dto.totalPontos > 0) c.getCartaoFidelidade().setTotalPontos(dto.totalPontos);
 
-                        // atualizar status com base no total carregado
                         c.atualizarStatus();
 
                         clientes.add(c);
@@ -211,7 +186,6 @@ public class ProgramaFidelidade {
             }
         }
 
-        // CARREGAR TRANSAÇÕES
         File transacoesFile = new File(TRANSACOES_FILE);
 
         if (transacoesFile.exists()) {
@@ -237,9 +211,6 @@ public class ProgramaFidelidade {
         }
     }
 
-    // --------------------------------------------
-    // DTOs INTERNOS
-    // --------------------------------------------
     private static class ClienteDTO {
         String nome;
         String cpf;
