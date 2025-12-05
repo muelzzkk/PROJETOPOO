@@ -1,0 +1,17 @@
+<component name="libraryTable">
+  <library name="gson-2.13.2">
+    <CLASSES>
+      <root url="jar://$USER_HOME$/Downloads/PROJETOPOO-diogo-testes-unitarios-e-arquivos/CodigoCorrigido/libs/gson-2.13.2.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/PROJETOPOO-diogo-testes-unitarios-e-arquivos/CodigoCorrigido/libs/jspecify-1.0.0.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/PROJETOPOO-diogo-testes-unitarios-e-arquivos/CodigoCorrigido/libs/junit-jupiter-6.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/PROJETOPOO-diogo-testes-unitarios-e-arquivos/CodigoCorrigido/libs/junit-jupiter-api-6.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/PROJETOPOO-diogo-testes-unitarios-e-arquivos/CodigoCorrigido/libs/junit-jupiter-engine-6.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/PROJETOPOO-diogo-testes-unitarios-e-arquivos/CodigoCorrigido/libs/junit-jupiter-params-6.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/PROJETOPOO-diogo-testes-unitarios-e-arquivos/CodigoCorrigido/libs/junit-platform-commons-6.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/PROJETOPOO-diogo-testes-unitarios-e-arquivos/CodigoCorrigido/libs/junit-platform-engine-6.0.1.jar!/" />
+      <root url="jar://$USER_HOME$/Downloads/PROJETOPOO-diogo-testes-unitarios-e-arquivos/CodigoCorrigido/libs/opentest4j-1.3.0.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
