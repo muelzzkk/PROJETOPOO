@@ -1,7 +1,14 @@
 package Projeto_POO.src.main.java.view;
 
+import Projeto_POO.src.main.java.Controller.ClienteController;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import Projeto_POO.src.main.java.model.Exceptions.CampoInvalidoException;
+import Projeto_POO.src.main.java.model.Exceptions.ClienteJaRegistradoException;
+import Projeto_POO.src.main.java.model.Exceptions.ClienteNaoEncontradoException;
+import Projeto_POO.src.main.java.model.Exceptions.DadosObrigatoriosException;
+import Projeto_POO.src.main.java.model.Exceptions.EmailInvalidoException;
 
 
 /*
@@ -16,11 +23,11 @@ import javax.swing.ImageIcon;
 public class TelaCadastro extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCadastro.class.getName());
+    private final ClienteController clienteController;
 
-    /**
-     * Creates new form TelaCadastro
-     */
-    public TelaCadastro() {
+    
+    public TelaCadastro(ClienteController controller) {
+        this.clienteController = controller;
         initComponents();
         setLocationRelativeTo(null);
         Image icon = new ImageIcon(getClass().getResource("/imagens/icon.png")).getImage();
@@ -39,13 +46,13 @@ public class TelaCadastro extends javax.swing.JFrame {
 
         jLabel1 = new javax.swing.JLabel();
         jPanel1 = new javax.swing.JPanel();
-        campo_nome = new javax.swing.JTextField();
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
-        campo_email = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         campo_cpf = new javax.swing.JTextField();
-        jButton1 = new javax.swing.JButton();
+        botao_cadastro = new javax.swing.JButton();
+        campo_email = new javax.swing.JTextField();
+        campo_nome = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Cadastro");
@@ -55,22 +62,11 @@ public class TelaCadastro extends javax.swing.JFrame {
         jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
         jLabel1.setText("Cadastro");
 
-        campo_nome.addInputMethodListener(new java.awt.event.InputMethodListener() {
-            public void caretPositionChanged(java.awt.event.InputMethodEvent evt) {
-            }
-            public void inputMethodTextChanged(java.awt.event.InputMethodEvent evt) {
-                campo_nomeInputMethodTextChanged(evt);
-            }
-        });
-        campo_nome.addActionListener(this::campo_nomeActionPerformed);
-
         jLabel2.setText("Nome:");
         jLabel2.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
 
         jLabel3.setText("Email:");
         jLabel3.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
-
-        campo_email.addActionListener(this::campo_emailActionPerformed);
 
         jLabel4.setText("CPF:");
         jLabel4.setCursor(new java.awt.Cursor(java.awt.Cursor.TEXT_CURSOR));
@@ -78,8 +74,8 @@ public class TelaCadastro extends javax.swing.JFrame {
         campo_cpf.setName(""); // NOI18N
         campo_cpf.addActionListener(this::campo_cpfActionPerformed);
 
-        jButton1.setText("Cadastrar");
-        jButton1.addActionListener(this::jButton1ActionPerformed);
+        botao_cadastro.setText("Cadastrar");
+        botao_cadastro.addActionListener(this::botao_cadastroActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -88,19 +84,19 @@ public class TelaCadastro extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel4)
                     .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                    .addComponent(jLabel3))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(botao_cadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 101, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addContainerGap(58, Short.MAX_VALUE))
-                    .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(campo_cpf)
-                            .addComponent(campo_email)
-                            .addComponent(campo_nome))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(campo_nome, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(campo_email, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(campo_cpf, javax.swing.GroupLayout.Alignment.LEADING))
                         .addGap(23, 23, 23))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -111,15 +107,15 @@ public class TelaCadastro extends javax.swing.JFrame {
                     .addComponent(jLabel2)
                     .addComponent(campo_nome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel3)
                     .addComponent(campo_email, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(campo_cpf, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 76, Short.MAX_VALUE)
+                .addComponent(botao_cadastro)
                 .addGap(26, 26, 26))
         );
 
@@ -132,7 +128,7 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
                     .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 75, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(87, Short.MAX_VALUE))
+                .addContainerGap(81, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -141,32 +137,42 @@ public class TelaCadastro extends javax.swing.JFrame {
                 .addComponent(jLabel1)
                 .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(103, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
         );
 
         pack();
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
-    private void campo_nomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campo_nomeActionPerformed
-       
-    }//GEN-LAST:event_campo_nomeActionPerformed
-
-    private void campo_emailActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campo_emailActionPerformed
-        
-    }//GEN-LAST:event_campo_emailActionPerformed
-
     private void campo_cpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campo_cpfActionPerformed
         
     }//GEN-LAST:event_campo_cpfActionPerformed
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void botao_cadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botao_cadastroActionPerformed
+        String nome = campo_nome.getText();
+        String cpf = campo_cpf.getText(); // O campo_cpf é um JTextField, retorna String
+        String email = campo_email.getText();
 
-    private void campo_nomeInputMethodTextChanged(java.awt.event.InputMethodEvent evt) {//GEN-FIRST:event_campo_nomeInputMethodTextChanged
-        // TODO add your handling code here:
-    }//GEN-LAST:event_campo_nomeInputMethodTextChanged
+        try {
+            // A ordem do cadastrar foi corrigida para: nome, cpf, email
+            clienteController.cadastrar(nome, cpf, email); 
+            JOptionPane.showMessageDialog(this, "Cliente cadastrado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            // Limpar campos após sucesso
+            campo_nome.setText("");
+            campo_cpf.setText("");
+            campo_email.setText("");
+            
+        } catch (DadosObrigatoriosException | EmailInvalidoException | CampoInvalidoException | ClienteJaRegistradoException | ClienteNaoEncontradoException ex) {
+            logger.log(java.util.logging.Level.WARNING, "Erro de validação no cadastro", ex);
+            JOptionPane.showMessageDialog(this, "Erro de validação: " + ex.getMessage(), "Erro de Cadastro", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Erro interno ao cadastrar cliente", ex);
+            JOptionPane.showMessageDialog(this, "Erro interno: " + ex.getMessage(), "Erro Fatal", JOptionPane.ERROR_MESSAGE);
+        }
+            
+        
+        
+    }//GEN-LAST:event_botao_cadastroActionPerformed
 
     /**
      * @param args the command line arguments
@@ -190,14 +196,14 @@ public class TelaCadastro extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TelaCadastro().setVisible(true));
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botao_cadastro;
     private javax.swing.JTextField campo_cpf;
     private javax.swing.JTextField campo_email;
     private javax.swing.JTextField campo_nome;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;

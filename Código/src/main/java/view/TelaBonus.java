@@ -4,8 +4,11 @@
  */
 package Projeto_POO.src.main.java.view;
 
+import Projeto_POO.src.main.java.Controller.TransacaoController;
+import Projeto_POO.src.main.java.model.Exceptions.CartaoFidelidadeException;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -14,17 +17,40 @@ import javax.swing.ImageIcon;
 public class TelaBonus extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaBonus.class.getName());
+    private final TransacaoController transacaoController; 
+    private static final int PREMIO_1_PONTOS = 20;
+    private static final int PREMIO_2_PONTOS = 35;
+    private static final int PREMIO_3_PONTOS = 50;
 
     /**
      * Creates new form TelaBonus
      */
-    public TelaBonus() {
+    public TelaBonus(TransacaoController controller) {
+        this.transacaoController = controller;
         initComponents();
         setLocationRelativeTo(null);
         Image icon = new ImageIcon(getClass().getResource("/imagens/icon.png")).getImage();
         setIconImage(icon);
     }
+    private void resgatar(int pontos) {
+        String cpf = campo_cpf.getText();
+        
+        if (cpf == null || cpf.isBlank()) {
+            JOptionPane.showMessageDialog(this, "Informe o CPF para resgatar o bônus.", "Aviso", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
+        try {
+            transacaoController.resgatarBonus(cpf, pontos);
+            JOptionPane.showMessageDialog(this, "Bônus de " + pontos + " pontos resgatado com sucesso!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+        } catch (CartaoFidelidadeException e) {
+            logger.log(java.util.logging.Level.WARNING, "Pontos insuficientes", e);
+            JOptionPane.showMessageDialog(this, "Pontos insuficientes: " + e.getMessage(), "Erro de Resgate", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Erro interno ao resgatar bônus", ex);
+            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage(), "Erro Fatal", JOptionPane.ERROR_MESSAGE);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -173,15 +199,15 @@ public class TelaBonus extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botao_premio1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botao_premio1ActionPerformed
-        // TODO add your handling code here:
+        resgatar(PREMIO_1_PONTOS);
     }//GEN-LAST:event_botao_premio1ActionPerformed
 
     private void botao_premio2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botao_premio2ActionPerformed
-        // TODO add your handling code here:
+        resgatar(PREMIO_2_PONTOS);
     }//GEN-LAST:event_botao_premio2ActionPerformed
 
     private void botao_premio3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botao_premio3ActionPerformed
-        // TODO add your handling code here:
+        resgatar(PREMIO_3_PONTOS);
     }//GEN-LAST:event_botao_premio3ActionPerformed
 
     private void campo_cpfActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_campo_cpfActionPerformed
@@ -210,7 +236,7 @@ public class TelaBonus extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TelaBonus().setVisible(true));
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

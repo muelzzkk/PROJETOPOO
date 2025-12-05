@@ -4,8 +4,11 @@
  */
 package Projeto_POO.src.main.java.view;
 
+import Projeto_POO.src.main.java.Controller.ProgramaFidelidadeController;
 import java.awt.Image;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
+import Projeto_POO.src.main.java.model.Exceptions.ClienteNaoEncontradoException;
 
 /**
  *
@@ -14,11 +17,12 @@ import javax.swing.ImageIcon;
 public class TelaPontos extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaPontos.class.getName());
+    private final ProgramaFidelidadeController programaController;
 
-    /**
-     * Creates new form TelaPontos
-     */
-    public TelaPontos() {
+   
+    
+    public TelaPontos(ProgramaFidelidadeController controller) {
+        this.programaController = controller;
         initComponents();
         setLocationRelativeTo(null);
         Image icon = new ImageIcon(getClass().getResource("/imagens/icon.png")).getImage();
@@ -51,6 +55,7 @@ public class TelaPontos extends javax.swing.JFrame {
         jLabel2.setText("CPF:");
 
         jButton1.setText("Buscar Cliente");
+        jButton1.addActionListener(this::jButton1ActionPerformed);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -107,29 +112,30 @@ public class TelaPontos extends javax.swing.JFrame {
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        String cpf = campo_cpf.getText();
+
+        try {
+            int pontos = programaController.buscarPontos(cpf);
+            jLabel4.setText("Pontos do Cliente (CPF " + cpf + "): " + pontos + " pontos.");
+        } catch (ClienteNaoEncontradoException ex) {
+            logger.log(java.util.logging.Level.WARNING, "Cliente não encontrado", ex);
+            jLabel4.setText("Cliente não encontrado.");
+            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage(), "Erro de Consulta", JOptionPane.WARNING_MESSAGE);
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.SEVERE, "Erro interno ao buscar pontos", ex);
+            jLabel4.setText("Pontos do Cliente, encontrado com o CPF."); 
+            JOptionPane.showMessageDialog(this, "Erro interno: " + ex.getMessage(), "Erro Fatal", JOptionPane.ERROR_MESSAGE);
+        }
+    
+    }//GEN-LAST:event_jButton1ActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TelaPontos().setVisible(true));
+        
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

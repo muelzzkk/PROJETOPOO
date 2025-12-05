@@ -4,11 +4,11 @@
  */
 package Projeto_POO.src.main.java.view;
 
+import Projeto_POO.src.main.java.Controller.TransacaoController;
 import java.awt.Image;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
-import model.DadosObrigatoriosException;
-import model.ValorCompraInvalidoException;
+
 
 /**
  *
@@ -16,12 +16,14 @@ import model.ValorCompraInvalidoException;
  */
 public class TelaCompra extends javax.swing.JFrame {
     
+    
+    private final TransacaoController transacaoController;
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(TelaCompra.class.getName());
-
-    /**
-     * Creates new form TelaPontos
-     */
-    public TelaCompra() {
+   
+ 
+   
+    public TelaCompra(TransacaoController controller) {
+        this.transacaoController = controller;
         initComponents();
         setLocationRelativeTo(null);
         Image icon = new ImageIcon(getClass().getResource("/imagens/icon.png")).getImage();
@@ -142,40 +144,20 @@ public class TelaCompra extends javax.swing.JFrame {
     }//GEN-LAST:event_campo_valorActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        try {
-      
-        String cpf = campo_cpf.getText().trim();
-        if (cpf.isEmpty()) {
-            throw new DadosObrigatoriosException("O CPF é obrigatório.");
-        }
-
-       
-        String textoValor = campo_valor.getText().trim();
-        if (textoValor.isEmpty()) {
-            throw new DadosObrigatoriosException("O valor da compra é obrigatório.");
-        }
-
-        Double numero;
+        String cpf = campo_cpf.getText();
+        String valorStr = campo_valor.getText();
 
         try {
-            numero = Double.valueOf(textoValor);
-        } catch (NumberFormatException e) {
-            throw new ValorCompraInvalidoException("O valor informado não é um número válido.");
+            transacaoController.registrarCompra(cpf, valorStr);
+            JOptionPane.showMessageDialog(this, "Compra registrada e pontos adicionados!", "Sucesso", JOptionPane.INFORMATION_MESSAGE);
+            // Limpar campos
+            campo_cpf.setText("");
+            campo_valor.setText("");
+        } catch (Exception ex) {
+            logger.log(java.util.logging.Level.WARNING, "Erro ao registrar compra", ex);
+            JOptionPane.showMessageDialog(this, "Erro: " + ex.getMessage(), "Erro de Registro", JOptionPane.WARNING_MESSAGE);
         }
-
-       
-        if (numero <= 0) {
-            throw new ValorCompraInvalidoException("Valor informado para a compra é zero ou negativo");
-        }
-
-    } catch (DadosObrigatoriosException | ValorCompraInvalidoException ex) {
-        JOptionPane.showMessageDialog(
-            null,
-            ex.getMessage(),
-            "Erro de Entrada",
-            JOptionPane.ERROR_MESSAGE
-        );
-    }
+    
        
     }//GEN-LAST:event_jButton1ActionPerformed
 
@@ -201,7 +183,7 @@ public class TelaCompra extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new TelaCompra().setVisible(true));
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
